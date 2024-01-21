@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo curl
+echo jq
+echo sed
+echo awk
+echo zstd
+echo tar
+echo coreutils
