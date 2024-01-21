@@ -48,8 +48,7 @@ detect_target_triple() {
             local os_type="apple-darwin"
             ;;
         *)
-            echo "Error: Unsupported operating system '$os_name'" >&2
-            return 1
+            fail "Unsupported operating system '$os_name'"
             ;;
     esac
 
@@ -57,12 +56,33 @@ detect_target_triple() {
     echo "${machine_hw_name}-${os_type}"
 }
 
+check_sha256() {
+	local src="$1"
+	local dst="$2"
+	local target
+	target=$(detect_target_triple) || fail "Unable to detect target triple"
+
+	case "$target" in
+		x86_64-linux-gnu)
+			# compare sha256 of src and dst on linux; fail if mismatch
+			sha256sum --check --status <(echo "$src  $dst") || fail "Checksum mismatch for $dst"
+			;;
+		x86_64-apple-darwin)
+			# compare sha256 of src and dst on macos; fail if mismatch
+			shasum -a 256 --check --status <(echo "$src  $dst") || fail "Checksum mismatch for $dst"
+			;;
+		*)
+			fail "Unsupported target triple '$target'"
+			;;
+	esac
+}
+
 download_release() {
 	local version filename url
 	version="$1"
 	filename="$2"
 
-	target=$(detect_target_triple) || exit 1
+	target=$(detect_target_triple) || fail "Unable to detect target triple"
 
 	# Map the target triple to the platform
 	local platform
@@ -74,8 +94,7 @@ download_release() {
 			platform="macosx_amd64"
 			;;
 		*)
-			echo "Error: Unsupported target triple '$target'"
-			exit 1
+			fail "Unsupported target triple '$target'"
 			;;
 	esac
 
@@ -100,7 +119,8 @@ download_release() {
 	echo "* Downloading $TOOL_NAME release $version for $target..."
 	url="$GH_REPO/releases/download/${version}/${tarball}"
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
-	echo "$checksum  $filename" | sha256sum --check --status || fail "Checksum mismatch for $filename"
+
+	check_sha256 "$checksum" "$filename" || fail "Checksum mismatch for $filename"
 	echo "* SHA256 checksum verified for ${version}-${platform} artifact."
 }
 
