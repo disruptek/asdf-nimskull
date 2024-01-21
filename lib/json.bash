@@ -8,7 +8,8 @@ throw() {
 }
 
 awk_egrep() {
-  local pattern_string=$1
+  local pattern_string
+  pattern_string=$1
 
   gawk '{
     while ($0) {
@@ -25,13 +26,13 @@ json_tokenize() {
   local ESCAPE
   local CHAR
 
-  if echo "test string" | egrep -ao --color=never "test" >/dev/null 2>&1; then
-    GREP='egrep -ao --color=never'
+  if echo "test string" | grep -E -ao --color=never "test" >/dev/null 2>&1; then
+    GREP='grep -E -ao --color=never'
   else
-    GREP='egrep -ao'
+    GREP='grep -E -ao'
   fi
 
-  if echo "test string" | egrep -o "test" >/dev/null 2>&1; then
+  if echo "test string" | grep -E -o "test" >/dev/null 2>&1; then
     ESCAPE='(\\[^u[:cntrl:]]|\\u[0-9a-fA-F]{4})'
     CHAR='[^[:cntrl:]"\\]'
   else
@@ -40,21 +41,28 @@ json_tokenize() {
     CHAR='[^[:cntrl:]"\\\\]'
   fi
 
-  local STRING="\"$CHAR*($ESCAPE$CHAR*)*\""
-  local NUMBER='-?(0|[1-9][0-9]*)([.][0-9]*)?([eE][+-]?[0-9]*)?'
-  local KEYWORD='null|false|true'
-  local SPACE='[[:space:]]+'
+  local STRING
+  STRING="\"$CHAR*($ESCAPE$CHAR*)*\""
+  local NUMBER
+  NUMBER='-?(0|[1-9][0-9]*)([.][0-9]*)?([eE][+-]?[0-9]*)?'
+  local KEYWORD
+  KEYWORD='null|false|true'
+  local SPACE
+  SPACE='[[:space:]]+'
 
   # Force zsh to expand $A into multiple words
-  local is_wordsplit_disabled=$(unsetopt 2>/dev/null | grep -c '^shwordsplit$')
+  local is_wordsplit_disabled
+  is_wordsplit_disabled=$(unsetopt 2>/dev/null | grep -c '^shwordsplit$')
   if [ $is_wordsplit_disabled != 0 ]; then setopt shwordsplit; fi
-  $GREP "$STRING|$NUMBER|$KEYWORD|$SPACE|." | egrep -v "^$SPACE$"
+  $GREP "$STRING|$NUMBER|$KEYWORD|$SPACE|." | grep -E -v "^$SPACE$"
   if [ $is_wordsplit_disabled != 0 ]; then unsetopt shwordsplit; fi
 }
 
 json_parse_array() {
-  local index=0
-  local ary=''
+  local index
+  index=0
+  local ary
+  ary=''
 
   read -r token
   case "$token" in
@@ -82,7 +90,8 @@ json_parse_array() {
 
 json_parse_object() {
   local key
-  local obj=''
+  local obj
+  obj=''
 
   read -r token
   case "$token" in
@@ -121,7 +130,8 @@ json_parse_object() {
 }
 
 json_parse_value() {
-  local jpath="${1:+$1,}$2"
+  local jpath
+  jpath="${1:+$1,}$2"
 
   case "$token" in
     '{') json_parse_object "$jpath" ;;
