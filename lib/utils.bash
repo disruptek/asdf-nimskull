@@ -19,7 +19,7 @@ fi
 
 sort_versions() {
 	sed 'h; s/[+-]/./g; s/$/.z/; G; s/\n/ /' |
-		    LC_ALL=C sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4 -k 5,5n | awk '{print $2}'
+		LC_ALL=C sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4 -k 5,5n | awk '{print $2}'
 }
 
 list_github_tags() {
@@ -34,10 +34,12 @@ list_all_versions() {
 
 detect_target_triple() {
 	# Get the OS name (Darwin or Linux)
-	local os_name=$(uname -s)
+	local os_name
+	os_name=$(uname -s)
 
 	# Get the machine hardware name (x86_64)
-	local machine_hw_name=$(uname -m)
+	local machine_hw_name
+	machine_hw_name=$(uname -m)
 
 	# Normalize and construct the target triple
 	case "$os_name" in
