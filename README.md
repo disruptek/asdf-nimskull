@@ -1,6 +1,6 @@
 <div align="center">
 
-# asdf-nimskull [![Build](https://github.com/disruptek/asdf-nimskull/actions/workflows/build.yml/badge.svg)](https://github.com/disruptek/asdf-nimskull/actions/workflows/build.yml) [![Lint](https://github.com/disruptek/asdf-nimskull/actions/workflows/lint.yml/badge.svg)](https://github.com/disruptek/asdf-nimskull/actions/workflows/lint.yml)
+# asdf-nimskull [![Build](https://github.com/nim-works/asdf-nimskull/actions/workflows/build.yml/badge.svg)](https://github.com/nim-works/asdf-nimskull/actions/workflows/build.yml) [![Lint](https://github.com/nim-works/asdf-nimskull/actions/workflows/lint.yml/badge.svg)](https://github.com/nim-works/asdf-nimskull/actions/workflows/lint.yml)
 
 [nimskull](https://nim-works.github.io/nimskull/) plugin for the [asdf version manager](https://asdf-vm.com).
 
@@ -27,7 +27,7 @@ Plugin:
 ```shell
 asdf plugin add nimskull
 # or
-asdf plugin add nimskull https://github.com/disruptek/asdf-nimskull.git
+asdf plugin add nimskull https://github.com/nim-works/asdf-nimskull.git
 ```
 
 nimskull:
@@ -53,8 +53,8 @@ install & manage versions.
 
 Contributions of any kind welcome! See the [contributing guide](contributing.md).
 
-[Thanks goes to these contributors](https://github.com/disruptek/asdf-nimskull/graphs/contributors)!
+[Thanks goes to these contributors](https://github.com/nim-works/asdf-nimskull/graphs/contributors)!
 
 # License
 
-See [LICENSE](LICENSE) © [Smooth Operator](https://github.com/disruptek/)
+MIT
