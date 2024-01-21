@@ -19,7 +19,7 @@ fi
 
 sort_versions() {
 	sed 'h; s/[+-]/./g; s/$/.z/; G; s/\n/ /' |
-        LC_ALL=C sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4 -k 5,5n | awk '{print $2}'
+		    LC_ALL=C sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4 -k 5,5n | awk '{print $2}'
 }
 
 list_github_tags() {
@@ -33,27 +33,27 @@ list_all_versions() {
 }
 
 detect_target_triple() {
-    # Get the OS name (Darwin or Linux)
-    local os_name=$(uname -s)
+	# Get the OS name (Darwin or Linux)
+	local os_name=$(uname -s)
 
-    # Get the machine hardware name (x86_64)
-    local machine_hw_name=$(uname -m)
+	# Get the machine hardware name (x86_64)
+	local machine_hw_name=$(uname -m)
 
-    # Normalize and construct the target triple
-    case "$os_name" in
-        Linux)
-            local os_type="linux-gnu"
-            ;;
-        Darwin)
-            local os_type="apple-darwin"
-            ;;
-        *)
-            fail "Unsupported operating system '$os_name'"
-            ;;
-    esac
+	# Normalize and construct the target triple
+	case "$os_name" in
+	Linux)
+		local os_type="linux-gnu"
+		;;
+	Darwin)
+		local os_type="apple-darwin"
+		;;
+	*)
+		fail "Unsupported operating system '$os_name'"
+		;;
+	esac
 
-    # Construct the target triple
-    echo "${machine_hw_name}-${os_type}"
+	# Construct the target triple
+	echo "${machine_hw_name}-${os_type}"
 }
 
 check_sha256() {
@@ -63,17 +63,17 @@ check_sha256() {
 	target=$(detect_target_triple) || fail "Unable to detect target triple"
 
 	case "$target" in
-		x86_64-linux-gnu)
-			# compare sha256 of src and dst on linux; fail if mismatch
-			sha256sum --check --status <(echo "$src  $dst") || fail "Checksum mismatch for $dst"
-			;;
-		x86_64-apple-darwin)
-			# compare sha256 of src and dst on macos; fail if mismatch
-			shasum -a 256 --check --status <(echo "$src  $dst") || fail "Checksum mismatch for $dst"
-			;;
-		*)
-			fail "Unsupported target triple '$target'"
-			;;
+	x86_64-linux-gnu)
+		# compare sha256 of src and dst on linux; fail if mismatch
+		sha256sum --check --status <(echo "$src  $dst") || fail "Checksum mismatch for $dst"
+		;;
+	x86_64-apple-darwin)
+		# compare sha256 of src and dst on macos; fail if mismatch
+		shasum -a 256 --check --status <(echo "$src  $dst") || fail "Checksum mismatch for $dst"
+		;;
+	*)
+		fail "Unsupported target triple '$target'"
+		;;
 	esac
 }
 
@@ -87,15 +87,15 @@ download_release() {
 	# Map the target triple to the platform
 	local platform
 	case "$target" in
-		x86_64-linux-gnu)
-			platform="linux_amd64"
-			;;
-		x86_64-apple-darwin)
-			platform="macosx_amd64"
-			;;
-		*)
-			fail "Unsupported target triple '$target'"
-			;;
+	x86_64-linux-gnu)
+		platform="linux_amd64"
+		;;
+	x86_64-apple-darwin)
+		platform="macosx_amd64"
+		;;
+	*)
+		fail "Unsupported target triple '$target'"
+		;;
 	esac
 
 	echo "* Downloading $TOOL_NAME release $version manifest..."
