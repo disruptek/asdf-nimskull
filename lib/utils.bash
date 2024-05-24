@@ -73,6 +73,10 @@ check_sha256() {
 		# compare sha256 of src and dst on macos; fail if mismatch
 		shasum -a 256 --check --status <(echo "$src  $dst") || fail "Checksum mismatch for $dst"
 		;;
+	arm64-apple-darwin)
+		# compare sha256 of src and dst on macos; fail if mismatch
+		shasum -a 256 --check --status <(echo "$src  $dst") || fail "Checksum mismatch for $dst"
+		;;
 	*)
 		fail "Unsupported target triple '$target'"
 		;;
@@ -94,6 +98,9 @@ download_release() {
 		;;
 	x86_64-apple-darwin)
 		platform="macosx_amd64"
+		;;
+	arm64-apple-darwin)
+		platform="macosx_arm64"
 		;;
 	*)
 		fail "Unsupported target triple '$target'"
